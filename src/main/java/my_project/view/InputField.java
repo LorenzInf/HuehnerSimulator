@@ -9,4 +9,8 @@ public class InputField {
     public JTextArea getTextArea() {
         return textArea;
     }
+
+    public JPanel getPanel() {
+        return panel1;
+    }
 }

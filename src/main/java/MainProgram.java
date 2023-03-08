@@ -1,5 +1,6 @@
 import KAGO_framework.Config;
 import KAGO_framework.control.MainController;
+import my_project.control.ProgramController;
 
 public class MainProgram {
 

@@ -6,6 +6,7 @@ import KAGO_framework.view.DrawTool;
 import my_project.control.ProgramController;
 import KAGO_framework.view.DrawFrame;
 import KAGO_framework.view.DrawingPanel;
+import my_project.view.InputField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,6 +48,7 @@ public class ViewController implements ActionListener, KeyListener, MouseListene
     private static ArrayList<Integer> currentlyPressedKeys = new ArrayList<>();;
     private ArrayList<Scene> scenes;
     private SoundController soundController;
+    private InputField inputField;
 
     // Attribute
     private int dt;
@@ -126,6 +128,14 @@ public class ViewController implements ActionListener, KeyListener, MouseListene
         showScene(0);
         // Übergibt den weiteren Programmfluss an das neue Objekt der Klasse ViewController
         if ( Config.INFO_MESSAGES) System.out.println("  > ViewController: Fenster eingerichtet. Startszene (Index: 0) angelegt.");
+
+        JFrame frame = new JFrame("Hühner Simulator Code");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600,1000 + 29);
+        inputField = new InputField();
+        frame.setContentPane(inputField.getPanel());
+        frame.setVisible(true);
+        frame.setLocation(x + my_project.Config.WINDOW_WIDTH - 15,y); //kp wieso das 15px zu weit rechts ist
     }
 
     /**
