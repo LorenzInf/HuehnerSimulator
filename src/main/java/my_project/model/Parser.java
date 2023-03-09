@@ -4,7 +4,7 @@ public class Parser {
     /* ---------- Syntax: ----------
 
     /// Parts ///
-    part Aufbau {
+    part Aufbau(x,y) {
         /// CODE
     }
     part Durchlauf {
