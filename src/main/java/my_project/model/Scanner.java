@@ -47,14 +47,15 @@ public class Scanner {
         input = input.replaceAll("\t","");
         String[] inputLines = input.split("\\s");
         for(String line : inputLines) {
-            for(int i = 0; i < line.length(); i++) { //TODO Fix (Punctuation right after name/number does not get read)
+            for(int i = 0; i < line.length(); i++) {
                 if(String.valueOf(line.charAt(i)).matches("[a-zA-z]")) {
                     StringBuilder currWord = new StringBuilder();
                     for(; i < line.length() && !String.valueOf(line.charAt(i)).matches("[(){},;\\s]"); i++) {
                         currWord.append(line.charAt(i));
                     }
+                    i--;
                     if(currWord.toString().matches("function|part"))
-                        tokenList.append(new Token<>("S-WORD",currWord.toString()));
+                        tokenList.append(new Token<>("S-WORT",currWord.toString()));
                     else if(currWord.toString().matches("erzeugeEssen|erzeugeWand|erzeugeHuhn|geh|drehLinks|drehRechts|friss"))
                         tokenList.append(new Token<>("BEFEHL",currWord.toString()));
                     else
@@ -64,13 +65,14 @@ public class Scanner {
                     for(; i < line.length() && String.valueOf(line.charAt(i)).matches("[0-9]"); i++) {
                         currWord.append(line.charAt(i));
                     }
+                    i--;
                     tokenList.append(new Token<>("ZAHL",currWord.toString()));
                 } else if(String.valueOf(line.charAt(i)).matches("[(){},;]")) {
                     tokenList.append(new Token<>("PUNKTUATION",Character.toString(line.charAt(i))));
                 } else return false;
             }
         }
-        //DEBUG
+        //DEBUG//
         tokenList.toFirst();
         while(tokenList.hasAccess()) {
             System.out.print("[" + tokenList.getContent().getTokenType() + ", " + tokenList.getContent().getTokenName() + "], ");
