@@ -1,6 +1,7 @@
 package my_project.control;
 
 import KAGO_framework.control.ViewController;
+import my_project.model.Chicken;
 import my_project.view.SimulationSceene;
 
 /**
@@ -15,6 +16,7 @@ public class ProgramController {
     // Referenzen
     private ViewController viewController;  // diese Referenz soll auf ein Objekt der Klasse viewController zeigen. Über dieses Objekt wird das Fenster gesteuert.
     private SimulationSceene sceene;
+    private Chicken chicken;
     /**
      * Konstruktor
      * Dieser legt das Objekt der Klasse ProgramController an, das den Programmfluss steuert.
@@ -26,6 +28,11 @@ public class ProgramController {
         this.viewController = viewController;
         sceene = new SimulationSceene(viewController);
         sceene.createField(18,10);
+        chicken = new Chicken();
+    }
+
+    public void createChicken(int x, int y){
+        sceene.createChicken(x,y,chicken);
     }
 
     /**

@@ -3,7 +3,10 @@ package my_project.view;
 import KAGO_framework.control.ViewController;
 import KAGO_framework.model.GraphicalObject;
 import KAGO_framework.view.DrawTool;
-import my_project.control.ProgramController;
+import my_project.model.Chicken;
+import my_project.model.Food;
+import my_project.model.GameComponent;
+import my_project.model.Wall;
 
 import java.awt.*;
 
@@ -11,7 +14,7 @@ public class SimulationSceene extends GraphicalObject {
 
     private int fieldWidth = 0;
     private int fieldHeight = 0;
-
+    private GameComponent[][] field;
 
     public SimulationSceene(ViewController viewController){
         viewController.draw(this);
@@ -33,5 +36,24 @@ public class SimulationSceene extends GraphicalObject {
     public void createField(int x, int y){
         fieldWidth = Math.min(x,20);
         fieldHeight = Math.min(y,20);
+        field = new GameComponent[x][y];
+    }
+
+    public void addWall(int x, int y){
+        if(field.length>=x && field[x].length >= y){
+            field[x][y] = new Wall();
+        }
+    }
+
+    public void createFood(int x, int y){
+        if(field.length>=x && field[x].length >= y){
+            field[x][y] = new Food();
+        }
+    }
+
+    public void createChicken(int x, int y, Chicken chicken){
+        if(field.length>=x && field[x].length >= y){
+            field[x][y] = chicken;
+        }
     }
 }
