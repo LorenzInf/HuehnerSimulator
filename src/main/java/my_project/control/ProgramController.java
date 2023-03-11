@@ -1,8 +1,8 @@
 package my_project.control;
 
 import KAGO_framework.control.ViewController;
-import my_project.model.Chicken;
-import my_project.view.SimulationSceene;
+import my_project.model.Field;
+import my_project.view.SimulationSceeneManager;
 
 /**
  * Ein Objekt der Klasse ProgramController dient dazu das Programm zu steuern. Die updateProgram - Methode wird
@@ -15,8 +15,7 @@ public class ProgramController {
 
     // Referenzen
     private ViewController viewController;  // diese Referenz soll auf ein Objekt der Klasse viewController zeigen. Über dieses Objekt wird das Fenster gesteuert.
-    private SimulationSceene sceene;
-    private Chicken chicken;
+    private SimulationSceeneManager sceene;
     /**
      * Konstruktor
      * Dieser legt das Objekt der Klasse ProgramController an, das den Programmfluss steuert.
@@ -26,14 +25,10 @@ public class ProgramController {
      */
     public ProgramController(ViewController viewController){
         this.viewController = viewController;
-        sceene = new SimulationSceene(viewController);
-        sceene.createField(18,10);
-        chicken = new Chicken();
+        sceene = new SimulationSceeneManager(viewController);
+        sceene.createField(15,15);
     }
 
-    public void createChicken(int x, int y){
-        sceene.createChicken(x,y,chicken);
-    }
 
     /**
      * Diese Methode wird genau ein mal nach Programmstart aufgerufen.
