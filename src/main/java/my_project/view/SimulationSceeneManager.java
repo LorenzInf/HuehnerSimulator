@@ -14,7 +14,7 @@ public class SimulationSceeneManager extends GraphicalObject {
 
     public SimulationSceeneManager(ViewController viewController){
         viewController.draw(this);
-        background = createImage("src/main/resources/graphic/green-grass-field-background.png"); //ToDO ist kein gutes Bild, muss erstzt werden.
+        background = createImage("src/main/resources/graphic/Hintergrund.png"); //ToDO ist kein gutes Bild, muss erstzt werden.
         this.viewController = viewController;
     }
 
@@ -29,7 +29,6 @@ public class SimulationSceeneManager extends GraphicalObject {
     public void createField(int x, int y){
         field = new Field(x,y);
         viewController.draw(field);
-        addWall(5,5);
         createFood(4,13);
     }
 

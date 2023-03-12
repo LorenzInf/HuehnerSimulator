@@ -26,7 +26,7 @@ public class ProgramController {
     public ProgramController(ViewController viewController){
         this.viewController = viewController;
         sceene = new SimulationSceeneManager(viewController);
-        sceene.createField(15,15);
+        sceene.createField(5,5);
     }
 
 

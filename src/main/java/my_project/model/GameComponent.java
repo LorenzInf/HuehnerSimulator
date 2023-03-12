@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage;
 
 public abstract class GameComponent extends GraphicalObject {
 
-    private BufferedImage img;
+    protected BufferedImage img;
 
     public GameComponent(){
-        img = createImage("src/main/resources/graphic/circle.png"); //test
+
     }
 
     public BufferedImage getImg() {
