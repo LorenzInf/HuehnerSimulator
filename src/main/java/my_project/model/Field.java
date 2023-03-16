@@ -11,8 +11,9 @@ public class Field extends GraphicalObject {
     private GameComponent[][] field;
     private int xMin, xMax, yMin, yMax;
     private BufferedImage[] fieldImg;
+    private Chicken chicken;
 
-    public Field(int x, int y){
+    public Field(int x, int y, Chicken chicken){
         this.x = x;
         this.y = y;
         x = Math.min(x,20);
@@ -33,6 +34,7 @@ public class Field extends GraphicalObject {
                 createImage("src/main/resources/graphic/Feld-Unten-Links.jpeg"),    //7
                 createImage("src/main/resources/graphic/Feld-Links.jpeg")           //8
         };
+        this.chicken = chicken;
     }
 
     @Override
@@ -63,6 +65,9 @@ public class Field extends GraphicalObject {
                 if(field[i][j] != null){
                     drawTool.drawImage(field[i][j].getImg(),i*50+xMin,j*50+yMin);
                 }
+                if(chicken.getX() == i && chicken.getY() == j){
+                    drawTool.drawImage(chicken.getImg(),i*50+xMin,j*50+yMin);
+                }
             }
         }
     }
@@ -70,6 +75,28 @@ public class Field extends GraphicalObject {
     public void addComponent(GameComponent g,int x,int y){
         if(field.length > x && field[x].length > y){
             field[x][y] = g;
+        }
+    }
+
+    public void placeChickenTo(int x, int y){
+        chicken.setX(x);
+        chicken.setY(y);
+    }
+
+    public boolean moveChicken(){
+        int newX = Math.min( ((int) chicken.getX() + chicken.getMovementToX()), field.length - 1);
+        int newY = Math.min( ((int) chicken.getY() + chicken.getMovementToY()), field[0].length - 1);
+        if (field[newX][newY] instanceof Fence) {
+            return false;
+        }
+        chicken.setX(newX);
+        chicken.setY(newY);
+        return true;
+    }
+
+    public void moveChicken(int amount){
+        if(amount > 0 && moveChicken()){
+            moveChicken(amount-1);
         }
     }
 }
