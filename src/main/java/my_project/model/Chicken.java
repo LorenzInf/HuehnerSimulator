@@ -2,8 +2,9 @@ package my_project.model;
 
 public class Chicken extends GameComponent{
 
-    public int[][] nextMove;
-    public int current;
+    private int[][] nextMove;
+    private int current;
+
 
     public Chicken() {
         img = createImage("src/main/resources/graphic/Huhn.png");
@@ -34,5 +35,14 @@ public class Chicken extends GameComponent{
 
     public int getMovementToY(){
         return nextMove[current][1];
+    }
+
+
+    public int getXPos(){
+        return (int)x;
+    }
+
+    public int getYPos(){
+        return (int)y;
     }
 }

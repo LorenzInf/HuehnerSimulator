@@ -2,38 +2,65 @@ package my_project.control;
 
 import KAGO_framework.control.ViewController;
 
-import KAGO_framework.model.GraphicalObject;
-import KAGO_framework.view.DrawTool;
-import KAGO_framework.model.GraphicalObject;
-import KAGO_framework.view.DrawTool;
+import KAGO_framework.model.abitur.datenstrukturen.Queue;
 import my_project.model.*;
-import java.awt.image.BufferedImage;
+import my_project.view.InputField;
 
-public class ProgramController extends GraphicalObject {
+import javax.swing.*;
+import java.awt.*;
+
+public class ProgramController{
 
     private Field field;
-    private BufferedImage background;
     private ViewController viewController;
     private Chicken chicken;
+    private InputField inputField;
+    private Thread thread;
 
     public ProgramController(ViewController viewController){
-        viewController.draw(this);
-        background = createImage("src/main/resources/graphic/Hintergrund.png");
         this.viewController = viewController;
         chicken = new Chicken();
     }
 
     public void startProgram() {
-        createField(15,15);
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth();
+        int height = gd.getDisplayMode().getHeight();
+        int x = width / 2;
+        int y = height / 2;
+        x = x - my_project.Config.WINDOW_WIDTH / 2;
+        y = y - my_project.Config.WINDOW_HEIGHT / 2;
+        JFrame frame = new JFrame("Hühner Simulator Code");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600,1000 + 29);
+        inputField = new InputField();
+        frame.setContentPane(inputField.getPanel());
+        frame.setVisible(true);
+        frame.setLocation(x + my_project.Config.WINDOW_WIDTH - 15,y); //kp wieso das 15px zu weit rechts ist
+
+        createField(20,20);
+        createFood(6,7);
+        createChicken(4,7);
+        moveChicken();moveChicken();moveChicken();
+        turnRight();
+        moveChicken();moveChicken();
+        turnLeft();
+        moveChicken();moveChicken();
+        turnLeft();
+        moveChicken();moveChicken();
+        turnLeft();
+        moveChicken();moveChicken();
+        turnLeft();moveChicken();moveChicken();
+
     }
 
     public void updateProgram(double dt){
 
     }
 
-    @Override
-    public void draw(DrawTool drawTool) {
-        drawTool.drawImage(background,0,0);
+    public void startSimulation(Queue<int[]> commands){
+        thread = new Thread(new SimulationThread(commands,this));
+        thread.start();
     }
 
     //Erzeugt ein Feld mit x zu y Kästchen. Maximal bis zu 20*20
@@ -41,16 +68,6 @@ public class ProgramController extends GraphicalObject {
     public void createField(int x, int y){
         field = new Field(x,y,chicken);
         viewController.draw(field);
-        createFood(4,13);
-        createFence(5,5);
-        createFence(5,6);
-        createFence(5,7);
-        createFence(5,8);
-        createFence(5,9);
-        createChicken(3,5);
-        field.moveChicken(4);
-        turnRight();
-        moveChicken(3);
     }
 
     public void createFence(int x, int y){
@@ -63,10 +80,6 @@ public class ProgramController extends GraphicalObject {
 
     public void createChicken(int x, int y){
         field.placeChickenTo(x,y);
-    }
-
-    public void moveChicken(int amount){
-        field.moveChicken(amount);
     }
 
     public void moveChicken(){

@@ -129,6 +129,7 @@ public class ViewController implements ActionListener, KeyListener, MouseListene
         // Übergibt den weiteren Programmfluss an das neue Objekt der Klasse ViewController
         if ( Config.INFO_MESSAGES) System.out.println("  > ViewController: Fenster eingerichtet. Startszene (Index: 0) angelegt.");
 
+        /*
         JFrame frame = new JFrame("Hühner Simulator Code");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,1000 + 29);
@@ -136,6 +137,7 @@ public class ViewController implements ActionListener, KeyListener, MouseListene
         frame.setContentPane(inputField.getPanel());
         frame.setVisible(true);
         frame.setLocation(x + my_project.Config.WINDOW_WIDTH - 15,y); //kp wieso das 15px zu weit rechts ist
+        */
     }
 
     /**

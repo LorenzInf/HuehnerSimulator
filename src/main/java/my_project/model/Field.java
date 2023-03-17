@@ -1,5 +1,4 @@
 package my_project.model;
-
 import KAGO_framework.model.GraphicalObject;
 import KAGO_framework.view.DrawTool;
 
@@ -11,6 +10,7 @@ public class Field extends GraphicalObject {
     private GameComponent[][] field;
     private int xMin, xMax, yMin, yMax;
     private BufferedImage[] fieldImg;
+    private BufferedImage background;
     private Chicken chicken;
 
     public Field(int x, int y, Chicken chicken){
@@ -34,11 +34,13 @@ public class Field extends GraphicalObject {
                 createImage("src/main/resources/graphic/Feld-Unten-Links.jpeg"),    //7
                 createImage("src/main/resources/graphic/Feld-Links.jpeg")           //8
         };
+        background = createImage("src/main/resources/graphic/Hintergrund.png");
         this.chicken = chicken;
     }
 
     @Override
     public void draw(DrawTool drawTool) {
+        drawTool.drawImage(background,0,0);
         drawTool.setCurrentColor(Color.BLACK);
         for(int i = 0; i*50+xMin < xMax; i++){
             for(int j = 0; j*50+yMin < yMax; j++){
@@ -65,9 +67,6 @@ public class Field extends GraphicalObject {
                 if(field[i][j] != null){
                     drawTool.drawImage(field[i][j].getImg(),i*50+xMin,j*50+yMin);
                 }
-                if(chicken.getX() == i && chicken.getY() == j){
-                    drawTool.drawImage(chicken.getImg(),i*50+xMin,j*50+yMin);
-                }
             }
         }
     }
@@ -81,22 +80,19 @@ public class Field extends GraphicalObject {
     public void placeChickenTo(int x, int y){
         chicken.setX(x);
         chicken.setY(y);
+        field[Math.min(x, field.length)][Math.min(y, field[x].length)] = chicken;
     }
 
-    public boolean moveChicken(){
+    public void moveChicken(){
         int newX = Math.min( ((int) chicken.getX() + chicken.getMovementToX()), field.length - 1);
         int newY = Math.min( ((int) chicken.getY() + chicken.getMovementToY()), field[0].length - 1);
-        if (field[newX][newY] instanceof Fence) {
-            return false;
+        if (!(field[newX][newY] instanceof Fence)) {
+            field[chicken.getXPos()][chicken.getYPos()] = null;
+            chicken.setX(newX);
+            chicken.setY(newY);
+            field[newX][newY] = chicken;
         }
-        chicken.setX(newX);
-        chicken.setY(newY);
-        return true;
     }
 
-    public void moveChicken(int amount){
-        if(amount > 0 && moveChicken()){
-            moveChicken(amount-1);
-        }
-    }
+
 }

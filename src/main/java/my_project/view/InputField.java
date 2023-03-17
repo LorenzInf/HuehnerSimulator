@@ -1,11 +1,14 @@
 package my_project.view;
 
+import my_project.model.Parser;
 import my_project.model.Scanner;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class InputField {
     private JTextArea textArea;
@@ -13,9 +16,11 @@ public class InputField {
     private JLabel statusLabel;
     private JButton runButton;
     private final Scanner scanner;
+    private final Parser parser;
 
     public InputField() {
         scanner = new Scanner();
+        parser = new Parser();
         statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
         System.out.println(statusLabel.getFont().getSize());
         textArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -27,6 +32,12 @@ public class InputField {
             }
             public void changedUpdate(DocumentEvent e) {
 
+            }
+        });
+        runButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parser.parse(textArea.getText());
             }
         });
     }
