@@ -79,6 +79,25 @@ public class Scanner {
             tokenList.next();
         }
         System.out.println();
+        tokenList.toFirst();
         return true;
+    }
+
+    public String getType(){
+        if(tokenList.hasAccess()) {
+            return tokenList.getContent().getTokenType();
+        }
+        return null;
+    }
+
+    public String getValue(){
+        if(tokenList.hasAccess()) {
+            return tokenList.getContent().getTokenName();
+        }
+        return null;
+    }
+
+    public void nextToken(){
+        tokenList.next();
     }
 }
