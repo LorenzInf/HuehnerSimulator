@@ -5,8 +5,8 @@ import KAGO_framework.model.abitur.datenstrukturen.Queue;
 public class Parser implements ParserInterface {
 
     private final Scanner scanner;
-    private Queue<int[][][]> queue;
-    private int[][][] array;
+    private Queue<int[]> queue;
+    private int[] array;
 
     // int[0] == erzeugeEssen
     // int[1] == erzeugeWand
@@ -18,6 +18,7 @@ public class Parser implements ParserInterface {
     public Parser() {
         scanner = new Scanner();
         queue = new Queue();
+        array = new int[2];
 
     }
     /* ---------- Syntax: ----------
@@ -128,9 +129,24 @@ public class Parser implements ParserInterface {
                                 //BEFEHL(ZAHL,ZAHL);
                                 if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
-                                        case "erzeugeEssen" -> queue.enqueue(array = new int[0][zahlOne][zahlTwo]);
-                                        case "erzeugeWand" -> queue.enqueue(array = new int[1][zahlOne][zahlTwo]);
-                                        case "erzeugeHuhn" -> queue.enqueue(array = new int[2][zahlOne][zahlTwo]);
+                                        case "erzeugeEssen" -> {
+                                            array[0] = 0;
+                                            array[1] = zahlOne;
+                                            array[2] = zahlTwo;
+                                            queue.enqueue(array);
+                                        }
+                                        case "erzeugeWand" -> {
+                                            array[0] = 1;
+                                            array[1] = zahlOne;
+                                            array[2] = zahlTwo;
+                                            queue.enqueue(array);
+                                        }
+                                        case "erzeugeHuhn" -> {
+                                            array[0] = 2;
+                                            array[1] = zahlOne;
+                                            array[2] = zahlTwo;
+                                            queue.enqueue(array);
+                                        }
                                     }
                                     return true;
                                 }
@@ -139,15 +155,24 @@ public class Parser implements ParserInterface {
                     }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                         scanner.nextToken();
                         if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
-                            queue.enqueue(array = new int[3][zahlOne][0]);
+                            array[0] = 3;
+                            array[1] = zahlOne;
+                            array[2] = -1;
+                            queue.enqueue(array);
                             return true;
                         }
                     }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                         if(befehl.equals("drehLinks")){
-                            queue.enqueue(array = new int[4][0][0]);
+                            array[0] = 4;
+                            array[1] = -1;
+                            array[2] = -1;
+                            queue.enqueue(array);
                         }
                         if(befehl.equals("drehRechts")){
-                            queue.enqueue(array = new int[5][0][0]);
+                            array[0] = 5;
+                            array[1] = -1;
+                            array[2] = -1;
+                            queue.enqueue(array);
                         }
                         return true;
                     }
