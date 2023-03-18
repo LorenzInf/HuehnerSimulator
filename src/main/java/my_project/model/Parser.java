@@ -1,11 +1,24 @@
 package my_project.model;
 
+import KAGO_framework.model.abitur.datenstrukturen.Queue;
+
 public class Parser implements ParserInterface {
 
     private final Scanner scanner;
+    private Queue<int[][][]> queue;
+    private int[][][] array;
+
+    // int[0] == erzeugeEssen
+    // int[1] == erzeugeWand
+    // int[2] == erzeugeHuhn
+    // int[3] == geh
+    // int[4] == drehLinks
+    // int[5] == drehRechts
 
     public Parser() {
         scanner = new Scanner();
+        queue = new Queue();
+
     }
     /* ---------- Syntax: ----------
 
@@ -33,46 +46,44 @@ public class Parser implements ParserInterface {
     //Richtige Parse Methode, die Rückgabe fehlt, weil das bei dem Part nach Durchlauf kommt
     public boolean parse(String input) {
         if (scanner.scan(input)) {
-            if (scanner.getType().equals("S-WORT")) {
-                //part
-                if (scanner.getValue().equals("part")) {
+            if (scanner.getType().equals("S-WORT")  && scanner.getValue().equals("part")) {
+                //partAufbau
+                scanner.nextToken();
+                if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
                     scanner.nextToken();
-                    //partAufbau
-                    if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
+                    //partAufbau(
+                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
                         scanner.nextToken();
-                        //partAufbau(
-                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
+                        //partAufbau(ZAHL
+                        if (scanner.getType().equals("ZAHL")/* && Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
                             scanner.nextToken();
-                            //partAufbau(ZAHL
-                            if (scanner.getType().equals("ZAHL")/* && Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                            //partAufbau(ZAHL,
+                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                                 scanner.nextToken();
-                                //partAufbau(ZAHL,
-                                if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
+                                //partAufbau(ZAHL,ZAHL
+                                if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
                                     scanner.nextToken();
-                                    //partAufbau(ZAHL,ZAHL
-                                    if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                                    //partAufbau(ZAHL,ZAHL)
+                                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
                                         scanner.nextToken();
-                                        //partAufbau(ZAHL,ZAHL)
-                                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
+                                        //partAufbau(ZAHL,ZAHL){
+                                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                             scanner.nextToken();
-                                            //partAufbau(ZAHL,ZAHL){
-                                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                                            //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
+                                            if (checkBefehl("erzeugeHuhn")) {
                                                 scanner.nextToken();
-                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
-                                                if (checkBefehl("erzeugeHuhn")) {
+                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*
+                                                while (checkBefehl("erzeugeEssen")) {
                                                     scanner.nextToken();
-                                                    //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*
-                                                    while (checkBefehl("erzeugeEssen")) {
-                                                        scanner.nextToken();
-                                                    }
-                                                    //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)*
-                                                    while (checkBefehl("erzeugeWand")) {
-                                                        scanner.nextToken();
-                                                    }
-                                                    //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)*}
-                                                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
-                                                        scanner.nextToken();
-                                                    }
+                                                }
+                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)*
+                                                while (checkBefehl("erzeugeWand")) {
+                                                    scanner.nextToken();
+                                                }
+                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)}
+                                                if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
+                                                    scanner.nextToken();
+                                                    return true;
                                                 }
                                             }
                                         }
@@ -81,6 +92,10 @@ public class Parser implements ParserInterface {
                             }
                         }
                     }
+                }
+            }else{
+                if(scanner.getType().equals("BEFEHL")){
+                    return checkBefehl(scanner.getValue());
                 }
             }
         }
@@ -98,20 +113,43 @@ public class Parser implements ParserInterface {
                 scanner.nextToken();
                 //BEFEHL(ZAHL
                 if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 2 && Integer.parseInt(scanner.getValue()) >= 0*/) {
+                    int zahlOne = Integer.parseInt(scanner.getValue());
                     scanner.nextToken();
                     //BEFEHL(ZAHL,
                     if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                         scanner.nextToken();
                         //BEFEHL(ZAHL,ZAHL
                         if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 2 && Integer.parseInt(scanner.getValue()) >= 0*/) {
+                            int zahlTwo = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //BEFEHL(ZAHL,ZAHL)
                             if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
                                 scanner.nextToken();
                                 //BEFEHL(ZAHL,ZAHL);
-                                return scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";");
+                                if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                                    switch (befehl) {
+                                        case "erzeugeEssen" -> queue.enqueue(array = new int[0][zahlOne][zahlTwo]);
+                                        case "erzeugeWand" -> queue.enqueue(array = new int[1][zahlOne][zahlTwo]);
+                                        case "erzeugeHuhn" -> queue.enqueue(array = new int[2][zahlOne][zahlTwo]);
+                                    }
+                                    return true;
+                                }
                             }
                         }
+                    }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
+                        scanner.nextToken();
+                        if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                            queue.enqueue(array = new int[3][zahlOne][0]);
+                            return true;
+                        }
+                    }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                        if(befehl.equals("drehLinks")){
+                            queue.enqueue(array = new int[4][0][0]);
+                        }
+                        if(befehl.equals("drehRechts")){
+                            queue.enqueue(array = new int[5][0][0]);
+                        }
+                        return true;
                     }
                 }
             }
