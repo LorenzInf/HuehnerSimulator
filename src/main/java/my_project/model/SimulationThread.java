@@ -20,7 +20,7 @@ public class SimulationThread implements Runnable{
     public void run() {
         while (!commands.isEmpty()){
             skipTime = false;
-            System.out.println(Arrays.toString(commands.front()));
+            System.out.println(Arrays.toString(commands.front())); //Debug
             switch (commands.front()[0]) {
                 case 0 -> { programController.createField(commands.front()[1], commands.front()[2]); }
                 case 1 -> programController.createChicken(commands.front()[1], commands.front()[2]);

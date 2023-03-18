@@ -8,12 +8,13 @@ public class Parser implements ParserInterface {
     private Queue<int[]> queue;
     private int[] array;
 
-    // int[0] == erzeugeEssen
-    // int[1] == erzeugeWand
-    // int[2] == erzeugeHuhn
-    // int[3] == geh
-    // int[4] == drehLinks
-    // int[5] == drehRechts
+    // int[0] == erzeugeFeld
+    // int[1] == erzeugeEssen
+    // int[2] == erzeugeWand
+    // int[3] == erzeugeHuhn
+    // int[4] == geh
+    // int[5] == drehLinks
+    // int[6] == drehRechts
 
     public Parser() {
         scanner = new Scanner();
@@ -162,7 +163,6 @@ public class Parser implements ParserInterface {
                         if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                             for(int i = 0; i < zahlOne; i++){
                                 queue.enqueue(array = new int[]{4});
-                                System.out.println("ich muss gehen");
                             }
                             return true;
                         }
