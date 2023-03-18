@@ -31,12 +31,12 @@ public class Parser implements ParserInterface {
         /// CODE
     }
     ---> Sowohl "Aufbau" und "Durchlauf" muss es *genau* ein mal in jedem Programm geben
-    ---> erzeugeEssen/Wand/Feld/Huhn können nur in Aufbau aufgerufen werden, geh, drehLinks/Rechts, friss nur in Durchlauf
+    ---> erzeugeEssen/Zaun/Feld/Huhn können nur in Aufbau aufgerufen werden, geh, drehLinks/Rechts, friss nur in Durchlauf
             der Code in Aufbau wird sofort ausgeführt, der in Durchlauf danach etwas mit je x Sekunden Pause nach jeder Aktion (würde 0.5 oder so vorschlagen)
 
     /// Befehle ///
     erzeugeEssen(ZAHL,ZAHL);
-    erzeugeWand(ZAHL,ZAHL);
+    erzeugeZaun(ZAHL,ZAHL);
     erzeugeHuhn(ZAHL,ZAHL); (Darf nur ein mal aufgerufen werden)
     geh(ZAHL); ODER geh; (=geh(1);)
     drehLinks;
@@ -80,11 +80,11 @@ public class Parser implements ParserInterface {
                                                 while (checkBefehl("erzeugeEssen")) {
                                                     scanner.nextToken();
                                                 }
-                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)*
-                                                while (checkBefehl("erzeugeWand")) {
+                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
+                                                while (checkBefehl("erzeugeZaun")) {
                                                     scanner.nextToken();
                                                 }
-                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)}
+                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)}
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
                                                     return "Keine Fehler";
@@ -151,7 +151,7 @@ public class Parser implements ParserInterface {
                                 if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
                                         case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
-                                        case "erzeugeWand" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                        case "erzeugeZaun" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
                                         case "erzeugeHuhn" -> queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
                                     }
                                     return true;

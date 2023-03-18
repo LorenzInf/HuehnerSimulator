@@ -56,7 +56,7 @@ public class Scanner {
                     i--;
                     if(currWord.toString().matches("function|part"))
                         tokenList.append(new Token<>("S-WORT",currWord.toString()));
-                    else if(currWord.toString().matches("erzeugeEssen|erzeugeWand|erzeugeHuhn|geh|drehLinks|drehRechts|friss"))
+                    else if(currWord.toString().matches("erzeugeEssen|erzeugeZaun|erzeugeHuhn|geh|drehLinks|drehRechts|friss"))
                         tokenList.append(new Token<>("BEFEHL",currWord.toString()));
                     else
                         tokenList.append(new Token<>("BEZEICHNER",currWord.toString()));
