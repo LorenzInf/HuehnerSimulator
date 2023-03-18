@@ -41,17 +41,18 @@ public class InputField {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean works = false;
-                switch (parser.parse(textArea.getText())){
-                    case "Es fehlt das Schlüsselwort ´part´" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Keine Fehler" -> {statusLabel.setText(parser.parse(textArea.getText())); works = true; }
-                    case "Es fehlt eine Punktuation('{')" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt eine Punktuation('}')" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Du musst ein Huhn erzeugen" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt eine Punktuation(')')" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt eine Zahl" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt eine Punktuation(',')" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt eine Punktuation('(')" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Es fehlt der Bezeichner 'Aufbau'" -> statusLabel.setText(parser.parse(textArea.getText()));
+                String output = parser.parse(textArea.getText());
+                switch (output){
+                    case "Es fehlt das Schlüsselwort ´part´" -> statusLabel.setText(output);
+                    case "Keine Fehler" -> { statusLabel.setText(output); works = true; }
+                    case "Es fehlt eine Punktuation('{')" -> statusLabel.setText(output);
+                    case "Es fehlt eine Punktuation('}')" -> statusLabel.setText(output);
+                    case "Du musst ein Huhn erzeugen" -> statusLabel.setText(output);
+                    case "Es fehlt eine Punktuation(')')" -> statusLabel.setText(output);
+                    case "Es fehlt eine Zahl" -> statusLabel.setText(output);
+                    case "Es fehlt eine Punktuation(',')" -> statusLabel.setText(output);
+                    case "Es fehlt eine Punktuation('(')" -> statusLabel.setText(output);
+                    case "Es fehlt der Bezeichner 'Aufbau'" -> statusLabel.setText(output);
                 }
                 if(works){
                     programController.startSimulation(parser.getQueue());

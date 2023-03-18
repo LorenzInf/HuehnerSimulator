@@ -9,12 +9,12 @@ public class Parser implements ParserInterface {
     private int[] array;
 
     // int[0] == erzeugeFeld
-    // int[1] == erzeugeEssen
-    // int[2] == erzeugeWand
-    // int[3] == erzeugeHuhn
+    // int[1] == erzeugeHuhn
+    // int[2] == erzeugeEssen
+    // int[3] == erzeugeZaun
     // int[4] == geh
-    // int[5] == drehLinks
-    // int[6] == drehRechts
+    // int[5] == drehRechts
+    // int[6] == drehLinks
 
     public Parser() {
         scanner = new Scanner();
