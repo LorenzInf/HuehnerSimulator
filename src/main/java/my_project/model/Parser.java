@@ -178,6 +178,12 @@ public class Parser implements ParserInterface {
                             return true;
                         }
                     }
+                }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
+                    scanner.nextToken();
+                    if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                        queue.enqueue(array = new int[]{4});
+                        return true;
+                    }
                 }
             }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                 if(befehl.equals("drehLinks")){
