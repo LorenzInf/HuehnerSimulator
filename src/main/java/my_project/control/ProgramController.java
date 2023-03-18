@@ -33,24 +33,10 @@ public class ProgramController{
         JFrame frame = new JFrame("Hühner Simulator Code");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,1000 + 29);
-        inputField = new InputField();
+        inputField = new InputField(this);
         frame.setContentPane(inputField.getPanel());
         frame.setVisible(true);
         frame.setLocation(x + my_project.Config.WINDOW_WIDTH - 15,y); //kp wieso das 15px zu weit rechts ist
-
-        createField(20,20);
-        createFood(6,7);
-        createChicken(4,7);
-        moveChicken();moveChicken();moveChicken();
-        turnRight();
-        moveChicken();moveChicken();
-        turnLeft();
-        moveChicken();moveChicken();
-        turnLeft();
-        moveChicken();moveChicken();
-        turnLeft();
-        moveChicken();moveChicken();
-        turnLeft();moveChicken();moveChicken();
 
     }
 

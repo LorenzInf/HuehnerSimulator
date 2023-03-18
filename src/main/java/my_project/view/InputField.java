@@ -1,5 +1,6 @@
 package my_project.view;
 
+import my_project.control.ProgramController;
 import my_project.model.Parser;
 import my_project.model.Scanner;
 
@@ -17,10 +18,12 @@ public class InputField {
     private JButton runButton;
     private final Scanner scanner;
     private final Parser parser;
+    private ProgramController programController;
 
-    public InputField() {
+    public InputField(ProgramController programController) {
         scanner = new Scanner();
         parser = new Parser();
+        this.programController = programController;
         statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
         System.out.println(statusLabel.getFont().getSize());
         textArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -37,9 +40,10 @@ public class InputField {
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean works = false;
                 switch (parser.parse(textArea.getText())){
                     case "Es fehlt das Schlüsselwort ´part´" -> statusLabel.setText(parser.parse(textArea.getText()));
-                    case "Keine Fehler" -> statusLabel.setText(parser.parse(textArea.getText()));
+                    case "Keine Fehler" -> {statusLabel.setText(parser.parse(textArea.getText())); works = true; }
                     case "Es fehlt eine Punktuation('{')" -> statusLabel.setText(parser.parse(textArea.getText()));
                     case "Es fehlt eine Punktuation('}')" -> statusLabel.setText(parser.parse(textArea.getText()));
                     case "Du musst ein Huhn erzeugen" -> statusLabel.setText(parser.parse(textArea.getText()));
@@ -49,7 +53,9 @@ public class InputField {
                     case "Es fehlt eine Punktuation('(')" -> statusLabel.setText(parser.parse(textArea.getText()));
                     case "Es fehlt der Bezeichner 'Aufbau'" -> statusLabel.setText(parser.parse(textArea.getText()));
                 }
-                parser.parse(textArea.getText());
+                if(works){
+                    programController.startSimulation(parser.getQueue());
+                }
             }
         });
     }

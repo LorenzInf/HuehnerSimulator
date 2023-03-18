@@ -18,7 +18,6 @@ public class Parser implements ParserInterface {
     public Parser() {
         scanner = new Scanner();
         queue = new Queue();
-        array = new int[2];
 
     }
     /* ---------- Syntax: ----------
@@ -57,12 +56,15 @@ public class Parser implements ParserInterface {
                         scanner.nextToken();
                         //partAufbau(ZAHL
                         if (scanner.getType().equals("ZAHL")/* && Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                            int zahlOne = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //partAufbau(ZAHL,
                             if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                                 scanner.nextToken();
                                 //partAufbau(ZAHL,ZAHL
                                 if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                                    int zahlTwo = Integer.parseInt(scanner.getValue());
+                                    queue.enqueue(array = new int[]{0, zahlOne, zahlTwo});
                                     scanner.nextToken();
                                     //partAufbau(ZAHL,ZAHL)
                                     if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
@@ -147,24 +149,9 @@ public class Parser implements ParserInterface {
                                 //BEFEHL(ZAHL,ZAHL);
                                 if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
-                                        case "erzeugeEssen" -> {
-                                            array[0] = 0;
-                                            array[1] = zahlOne;
-                                            array[2] = zahlTwo;
-                                            queue.enqueue(array);
-                                        }
-                                        case "erzeugeWand" -> {
-                                            array[0] = 1;
-                                            array[1] = zahlOne;
-                                            array[2] = zahlTwo;
-                                            queue.enqueue(array);
-                                        }
-                                        case "erzeugeHuhn" -> {
-                                            array[0] = 2;
-                                            array[1] = zahlOne;
-                                            array[2] = zahlTwo;
-                                            queue.enqueue(array);
-                                        }
+                                        case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
+                                        case "erzeugeWand" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                        case "erzeugeHuhn" -> queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
                                     }
                                     return true;
                                 }
@@ -173,24 +160,18 @@ public class Parser implements ParserInterface {
                     }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                         scanner.nextToken();
                         if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
-                            array[0] = 3;
-                            array[1] = zahlOne;
-                            array[2] = -1;
-                            queue.enqueue(array);
+                            for(int i = 0; i < zahlOne; i++){
+                                queue.enqueue(array = new int[]{4});
+                                System.out.println("ich muss gehen");
+                            }
                             return true;
                         }
                     }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                         if(befehl.equals("drehLinks")){
-                            array[0] = 4;
-                            array[1] = -1;
-                            array[2] = -1;
-                            queue.enqueue(array);
+                            queue.enqueue(array = new int[]{6});
                         }
                         if(befehl.equals("drehRechts")){
-                            array[0] = 5;
-                            array[1] = -1;
-                            array[2] = -1;
-                            queue.enqueue(array);
+                            queue.enqueue(array = new int[]{5});
                         }
                         return true;
                     }
@@ -201,6 +182,10 @@ public class Parser implements ParserInterface {
 
     public boolean getScannerResult(String input) {
         return scanner.scan(input);
+    }
+
+    public Queue<int[]> getQueue() {
+        return queue;
     }
 
     //Erste Parse Methode, die normal war, aber man kann immer Sachen copy pasten --> Später löschen
