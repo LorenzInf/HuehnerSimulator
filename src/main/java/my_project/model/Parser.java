@@ -47,7 +47,7 @@ public class Parser implements ParserInterface {
     //Richtige Parse Methode, die Rückgabe fehlt, weil das bei dem Part nach Durchlauf kommt
     public String parse(String input) {
         if (scanner.scan(input)) {
-            if (scanner.getType().equals("S-WORT")  && scanner.getValue().equals("part")) {
+            if (scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
                 scanner.nextToken();
                 if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
@@ -88,40 +88,51 @@ public class Parser implements ParserInterface {
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
                                                     return "Keine Fehler";
-                                                }else{
-                                                   return "Es fehlt eine Punktuation('}')";
+                                                } else {
+                                                    return "Es fehlt eine Punktuation('}')";
                                                 }
-                                            }else{
+                                            } else {
                                                 return "Du musst ein Huhn erzeugen";
                                             }
-                                        }else{
+                                        } else {
                                             return "Es fehlt eine Punktuation('{')";
                                         }
-                                    }else{
+                                    } else {
                                         return "Es fehlt eine Punktuation(')')";
                                     }
-                                }else{
+                                } else {
                                     return "Es fehlt eine Zahl";
                                 }
-                            }else{
+                            } else {
                                 return "Es fehlt eine Punktuation(',')";
                             }
-                        }else {
+                        } else {
                             return "Es fehlt eine Zahl";
                         }
-                    }else{
+                    } else {
                         return "Es fehlt eine Punktuation('(')";
                     }
-                }else{
+                } else if (scanner.getValue().equals("Durchlauf")) {
+                    scanner.nextToken();
+                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                        scanner.nextToken();
+                        while (!scanner.getValue().equals("}")){
+                            if (scanner.getType().equals("BEFEHL")) {
+                                checkBefehl(scanner.getValue());
+                                scanner.nextToken();
+                            }
+                        }
+                        if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")){
+                            return "Keine Fehler";
+                        }
+                    }
+                } else {
                     return "Es fehlt der Bezeichner 'Aufbau'";
                 }
-            }else{
-                if(scanner.getType().equals("BEFEHL")){
-                    return "Keine Fehler";
-                }
+                return "Es fehlt das Schlüsselwort ´part´";
             }
         }
-        return "Es fehlt das Schlüsselwort ´part´";
+        return "Die Syntax ist falsch!";
     }
 
     //Checkt ob der Befehl gültig ist: z.B. erzeugeHuhn
@@ -166,16 +177,16 @@ public class Parser implements ParserInterface {
                             }
                             return true;
                         }
-                    }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
-                        if(befehl.equals("drehLinks")){
-                            queue.enqueue(array = new int[]{6});
-                        }
-                        if(befehl.equals("drehRechts")){
-                            queue.enqueue(array = new int[]{5});
-                        }
-                        return true;
                     }
                 }
+            }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                if(befehl.equals("drehLinks")){
+                    queue.enqueue(array = new int[]{6});
+                }
+                if(befehl.equals("drehRechts")){
+                    queue.enqueue(array = new int[]{5});
+                }
+                return true;
             }
         return false;
     }
