@@ -52,7 +52,7 @@ public class ProgramController{
     //Erzeugt ein Feld mit x zu y Kästchen. Maximal bis zu 20*20
 
     public void createField(int x, int y){
-        field = new Field(x,y,chicken);
+        field = new Field(Math.min(x,20),Math.min(y,20),chicken);
         viewController.draw(field);
     }
 
