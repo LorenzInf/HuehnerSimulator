@@ -44,7 +44,7 @@ public class Parser implements ParserInterface {
      */
 
     //Richtige Parse Methode, die Rückgabe fehlt, weil das bei dem Part nach Durchlauf kommt
-    public boolean parse(String input) {
+    public String parse(String input) {
         if (scanner.scan(input)) {
             if (scanner.getType().equals("S-WORT")  && scanner.getValue().equals("part")) {
                 //partAufbau
@@ -83,23 +83,41 @@ public class Parser implements ParserInterface {
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeWand(ZAHL,ZAHL);)}
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
-                                                    return true;
+                                                    return "Keine Fehler";
+                                                }else{
+                                                   return "Es fehlt eine Punktuation('}')";
                                                 }
+                                            }else{
+                                                return "Du musst ein Huhn erzeugen";
                                             }
+                                        }else{
+                                            return "Es fehlt eine Punktuation('{')";
                                         }
+                                    }else{
+                                        return "Es fehlt eine Punktuation(')')";
                                     }
+                                }else{
+                                    return "Es fehlt eine Zahl";
                                 }
+                            }else{
+                                return "Es fehlt eine Punktuation(',')";
                             }
+                        }else {
+                            return "Es fehlt eine Zahl";
                         }
+                    }else{
+                        return "Es fehlt eine Punktuation('(')";
                     }
+                }else{
+                    return "Es fehlt der Bezeichner 'Aufbau'";
                 }
             }else{
                 if(scanner.getType().equals("BEFEHL")){
-                    return checkBefehl(scanner.getValue());
+                    return "Keine Fehler";
                 }
             }
         }
-        return false;
+        return "Es fehlt das Schlüsselwort ´part´";
     }
 
     //Checkt ob der Befehl gültig ist: z.B. erzeugeHuhn
