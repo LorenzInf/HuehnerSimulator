@@ -96,7 +96,6 @@ public class Parser implements ParserInterface {
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
                                                     return "Keine Fehler";
-                                                    //Alex' Teil
                                                 } else {
                                                     return "Es fehlt eine Punktuation('}')";
                                                 }
@@ -193,18 +192,14 @@ public class Parser implements ParserInterface {
                 }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                     scanner.nextToken();
                     if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
-                        queue.enqueue(array = new int[]{4});
+                        switch(befehl){
+                            case "geh" -> queue.enqueue(array = new int[]{4});
+                            case "drehLinks" -> queue.enqueue(array = new int[]{6});
+                            case "drehRechts" -> queue.enqueue(array = new int[]{5});
+                        }
                         return true;
                     }
                 }
-            }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
-                if(befehl.equals("drehLinks")){
-                    queue.enqueue(array = new int[]{6});
-                }
-                if(befehl.equals("drehRechts")){
-                    queue.enqueue(array = new int[]{5});
-                }
-                return true;
             }
         return false;
     }
