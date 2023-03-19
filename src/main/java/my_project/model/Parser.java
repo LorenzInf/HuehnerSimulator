@@ -7,6 +7,7 @@ public class Parser implements ParserInterface {
     private final Scanner scanner;
     private Queue<int[]> queue;
     private int[] array;
+    private boolean huhnErzeugt;
 
     // int[0] == erzeugeFeld
     // int[1] == erzeugeHuhn
@@ -19,6 +20,7 @@ public class Parser implements ParserInterface {
     public Parser() {
         scanner = new Scanner();
         queue = new Queue();
+        huhnErzeugt = false;
 
     }
     /* ---------- Syntax: ----------
@@ -56,14 +58,14 @@ public class Parser implements ParserInterface {
                     if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
                         scanner.nextToken();
                         //partAufbau(ZAHL
-                        if (scanner.getType().equals("ZAHL")/* && Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                        if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
                             int zahlOne = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //partAufbau(ZAHL,
                             if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                                 scanner.nextToken();
                                 //partAufbau(ZAHL,ZAHL
-                                if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 0 && Integer.parseInt(scanner.getValue()) >= 20*/) {
+                                if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
                                     int zahlTwo = Integer.parseInt(scanner.getValue());
                                     queue.enqueue(array = new int[]{0, zahlOne, zahlTwo});
                                     scanner.nextToken();
@@ -156,14 +158,14 @@ public class Parser implements ParserInterface {
             if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
                 scanner.nextToken();
                 //BEFEHL(ZAHL
-                if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 2 && Integer.parseInt(scanner.getValue()) >= 0*/) {
+                if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
                     int zahlOne = Integer.parseInt(scanner.getValue());
                     scanner.nextToken();
                     //BEFEHL(ZAHL,
                     if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                         scanner.nextToken();
                         //BEFEHL(ZAHL,ZAHL
-                        if (scanner.getType().equals("ZAHL") /*&& Integer.parseInt(scanner.getValue()) < 2 && Integer.parseInt(scanner.getValue()) >= 0*/) {
+                        if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
                             int zahlTwo = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //BEFEHL(ZAHL,ZAHL)
@@ -174,7 +176,12 @@ public class Parser implements ParserInterface {
                                     switch (befehl) {
                                         case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
                                         case "erzeugeZaun" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
-                                        case "erzeugeHuhn" -> queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
+                                        case "erzeugeHuhn" -> {
+                                            if(!huhnErzeugt){
+                                                queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
+                                                huhnErzeugt = true;
+                                            }
+                                        }
                                     }
                                     return true;
                                 }
