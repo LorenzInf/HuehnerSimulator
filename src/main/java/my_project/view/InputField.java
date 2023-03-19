@@ -53,6 +53,8 @@ public class InputField {
                     case "Es fehlt eine Punktuation(',')" -> statusLabel.setText(output);
                     case "Es fehlt eine Punktuation('(')" -> statusLabel.setText(output);
                     case "Es fehlt der Bezeichner 'Aufbau'" -> statusLabel.setText(output);
+                    case "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!" -> statusLabel.setText(output);
+                    case "Es fehlt der Bezeichner 'Durchlauf'" -> statusLabel.setText(output);
                 }
                 if(works){
                     programController.startSimulation(parser.getQueue());
