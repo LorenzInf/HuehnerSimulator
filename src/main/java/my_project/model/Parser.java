@@ -81,7 +81,7 @@ public class Parser implements ParserInterface {
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
-                                                if(scanner.getType().equals("BEZEICHNER")){
+                                                if (scanner.getType().equals("BEZEICHNER")) {
                                                     return "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
@@ -89,33 +89,14 @@ public class Parser implements ParserInterface {
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
-                                                if(scanner.getType().equals("BEZEICHNER")){
+                                                if (scanner.getType().equals("BEZEICHNER")) {
                                                     return "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)}
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
+                                                    return "Keine Fehler";
                                                     //Alex' Teil
-                                                    if (scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
-                                                        scanner.nextToken();
-                                                        if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
-                                                            scanner.nextToken();
-                                                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
-                                                                scanner.nextToken();
-                                                                while (!scanner.getValue().equals("}")) {
-                                                                    if (scanner.getType().equals("BEFEHL")) {
-                                                                        checkBefehl(scanner.getValue());
-                                                                        scanner.nextToken();
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
-                                                                return "Keine Fehler";
-                                                            }
-                                                        }else{
-                                                            return "Es fehlt der Bezeichner 'Durchlauf'";
-                                                        }
-                                                    }
                                                 } else {
                                                     return "Es fehlt eine Punktuation('}')";
                                                 }
@@ -140,9 +121,26 @@ public class Parser implements ParserInterface {
                     } else {
                         return "Es fehlt eine Punktuation('(')";
                     }
+                } else if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
+                    scanner.nextToken();
+                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                        scanner.nextToken();
+                        while (!scanner.getValue().equals("}")) {
+                            if (scanner.getType().equals("BEFEHL")) {
+                                checkBefehl(scanner.getValue());
+                                scanner.nextToken();
+                            } else {
+                                return "Bitte schreibe die Befehle in der richtigen Syntax!";
+                            }
+                        }
+                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
+                            return "Keine Fehler";
+                        }
+                    }
                 } else {
-                    return "Es fehlt der Bezeichner 'Aufbau'";
+                    return "Es fehlt der Bezeichner 'Durchlauf' oder 'Part'";
                 }
+            } else {
                 return "Es fehlt das Schlüsselwort ´part´";
             }
         }

@@ -59,6 +59,7 @@ public class InputField {
                 if(works){
                     programController.startSimulation(parser.getQueue());
                 }
+                textArea.setText("");
             }
         });
     }
