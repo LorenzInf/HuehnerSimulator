@@ -37,6 +37,10 @@ public class Chicken extends GameComponent{
         return nextMove[current][1];
     }
 
+    public void resetCurrent(){
+        current = 0;
+    }
+
 
     public int getXPos(){
         return (int)x;
