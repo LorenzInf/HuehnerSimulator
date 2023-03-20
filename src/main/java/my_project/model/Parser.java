@@ -80,16 +80,8 @@ public class Parser implements ParserInterface {
                                             //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
                                             if (scanner.hasAccess() && checkBefehl("erzeugeHuhn")) {
                                                 scanner.nextToken();
-                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*
-                                                while (scanner.hasAccess() && checkBefehl("erzeugeEssen")) {
-                                                    scanner.nextToken();
-                                                }
-                                                //Abfangen, wenn zu viel geschrieben wird
-                                                if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER")) {
-                                                    return "Unbekannter Befehl";
-                                                }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
-                                                while (scanner.hasAccess() && checkBefehl("erzeugeZaun")) {
+                                                while (scanner.hasAccess() && checkBefehl("erzeugeEssen") || checkBefehl("erzeugeZaun")) {
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
