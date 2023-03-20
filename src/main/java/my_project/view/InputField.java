@@ -57,14 +57,15 @@ public class InputField {
     public void scan() {
         boolean scanSuccess = scanner.scan(textArea.getText());
         if(!scanSuccess) {
-            statusLabel.setText("Fix errors");
+            statusLabel.setText("Unbekanntes Symbol");
             statusLabel.setForeground(new Color(200,10,10));
-            statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.BOLD,17));
+            statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.BOLD,12));
         } else {
-            //statusLabel.setText("Die Mengenklammern müssen erzeugt werden, damit das Programm debuggen kann!");
             statusLabel.setForeground(Color.BLACK);
             statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
         }
+        String output = parser.parse(textArea.getText());
+        statusLabel.setText(output);
     }
 
     public JTextArea getTextArea() {

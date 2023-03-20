@@ -72,6 +72,7 @@ public class Scanner {
                 } else return false;
             }
         }
+        /*
         //DEBUG//
         tokenList.toFirst();
         while(tokenList.hasAccess()) {
@@ -79,6 +80,7 @@ public class Scanner {
             tokenList.next();
         }
         System.out.println();
+        */
         tokenList.toFirst();
         return true;
     }
@@ -99,5 +101,9 @@ public class Scanner {
 
     public void nextToken(){
         tokenList.next();
+    }
+
+    public boolean hasAccess() {
+        return tokenList.hasAccess();
     }
 }

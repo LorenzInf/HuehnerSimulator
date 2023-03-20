@@ -50,54 +50,54 @@ public class Parser implements ParserInterface {
     public String parse(String input) {
         huhnErzeugt = false;
         queue = new Queue<>();
-        if (scanner.scan(input)) {
+        if (!input.equals("") && scanner.scan(input)) {
             if (scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
                 scanner.nextToken();
-                if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
+                if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
                     scanner.nextToken();
                     //partAufbau(
-                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
+                    if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
                         scanner.nextToken();
                         //partAufbau(ZAHL
-                        if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
+                        if (scanner.hasAccess() && scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
                             int zahlOne = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //partAufbau(ZAHL,
-                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
+                            if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                                 scanner.nextToken();
                                 //partAufbau(ZAHL,ZAHL
-                                if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
+                                if (scanner.hasAccess() && scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) >= 0 && Integer.parseInt(scanner.getValue()) < 16){
                                     int zahlTwo = Integer.parseInt(scanner.getValue());
                                     queue.enqueue(array = new int[]{0, zahlOne, zahlTwo});
                                     scanner.nextToken();
                                     //partAufbau(ZAHL,ZAHL)
-                                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
+                                    if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
                                         scanner.nextToken();
                                         //partAufbau(ZAHL,ZAHL){
-                                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                                        if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                             scanner.nextToken();
                                             //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
-                                            if (checkBefehl("erzeugeHuhn")) {
+                                            if (scanner.hasAccess() && checkBefehl("erzeugeHuhn")) {
                                                 scanner.nextToken();
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*
-                                                while (checkBefehl("erzeugeEssen")) {
+                                                while (scanner.hasAccess() && checkBefehl("erzeugeEssen")) {
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
-                                                if (scanner.getType().equals("BEZEICHNER")) {
+                                                if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER")) {
                                                     return "Unbekannter Befehl";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
-                                                while (checkBefehl("erzeugeZaun")) {
+                                                while (scanner.hasAccess() && checkBefehl("erzeugeZaun")) {
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
-                                                if (scanner.getType().equals("BEZEICHNER")) {
+                                                if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER")) {
                                                     return "Unbekannter Befehl";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)}
-                                                if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
+                                                if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
                                                     return "Keine Fehler";
                                                 } else {
@@ -124,11 +124,11 @@ public class Parser implements ParserInterface {
                     } else {
                         return "Es fehlt eine Punktuation('(')";
                     }
-                } else if (scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
+                } else if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
                     scanner.nextToken();
-                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                    if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                         scanner.nextToken();
-                        while (!scanner.getValue().equals("}")) {
+                        while (scanner.hasAccess() && !scanner.getValue().equals("}")) {
                             if (scanner.getType().equals("BEFEHL")) {
                                 checkBefehl(scanner.getValue());
                                 scanner.nextToken();
@@ -136,7 +136,7 @@ public class Parser implements ParserInterface {
                                 return "Unbekannter Befehl";
                             }
                         }
-                        if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
+                        if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                             return "Keine Fehler";
                         }
                     }
@@ -157,24 +157,24 @@ public class Parser implements ParserInterface {
             scanner.nextToken();
             }
             //BEFEHL(
-            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
+            if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("(")) {
                 scanner.nextToken();
                 //BEFEHL(ZAHL
-                if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
+                if (scanner.hasAccess() && scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
                     int zahlOne = Integer.parseInt(scanner.getValue());
                     scanner.nextToken();
                     //BEFEHL(ZAHL,
-                    if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
+                    if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(",")) {
                         scanner.nextToken();
                         //BEFEHL(ZAHL,ZAHL
-                        if (scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
+                        if (scanner.hasAccess() && scanner.getType().equals("ZAHL") && Integer.parseInt(scanner.getValue()) < 16 && Integer.parseInt(scanner.getValue()) >= 0){
                             int zahlTwo = Integer.parseInt(scanner.getValue());
                             scanner.nextToken();
                             //BEFEHL(ZAHL,ZAHL)
-                            if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
+                            if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")) {
                                 scanner.nextToken();
                                 //BEFEHL(ZAHL,ZAHL);
-                                if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                                if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
                                         case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
                                         case "erzeugeZaun" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
@@ -189,18 +189,18 @@ public class Parser implements ParserInterface {
                                 }
                             }
                         }
-                    }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
+                    }else if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                         scanner.nextToken();
-                        if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                        if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                             for(int i = 0; i < zahlOne; i++){
                                 queue.enqueue(array = new int[]{4});
                             }
                             return true;
                         }
                     }
-                }else if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
+                }else if(scanner.hasAccess() && scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                     scanner.nextToken();
-                    if(scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
+                    if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                         switch(befehl){
                             case "geh" -> queue.enqueue(array = new int[]{4});
                             case "drehLinks" -> queue.enqueue(array = new int[]{6});
