@@ -80,12 +80,12 @@ public class Parser implements ParserInterface {
                                         if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                             scanner.nextToken();
                                             //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
-                                            if (scanner.hasAccess() && checkBefehl("erzeugeHuhn")) {
+                                            if (scanner.hasAccess() && checkBefehl("erzeugeHuhn").equals("Keine Fehler")) {
                                                 scanner.nextToken();
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
-                                                while (scanner.hasAccess() && (checkBefehl("erzeugeEssen") || checkBefehl("erzeugeZaun"))) {
+                                                while (scanner.hasAccess() && (checkBefehl("erzeugeEssen").equals("Keine Fehler") || checkBefehl("erzeugeZaun").equals("Keine Fehler"))) {
                                                     if((foodX == chickenX && foodY == chickenY) || (fenceX == chickenX && fenceY == chickenY)){
-                                                        return "Keine Objekte auf dem Huhzn erzeugen!";
+                                                        return "Keine Objekte auf dem Huhn erzeugen!";
                                                     }
                                                     scanner.nextToken();
                                                 }
@@ -103,12 +103,8 @@ public class Parser implements ParserInterface {
                                                             if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                                                 scanner.nextToken();
                                                                 while (scanner.hasAccess() && !scanner.getValue().equals("}")) {
-                                                                    if (scanner.getType().equals("BEFEHL")) {
-                                                                        checkBefehl(scanner.getValue());
-                                                                        scanner.nextToken();
-                                                                    } else {
-                                                                        return "Unbekannter Befehl";
-                                                                    }
+                                                                    checkBefehl(scanner.getValue());
+                                                                    scanner.nextToken();
                                                                 }
                                                                 if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                                     return "Keine Fehler";
@@ -176,7 +172,7 @@ public class Parser implements ParserInterface {
     }
 
     //Checkt ob der Befehl gültig ist: z.B. erzeugeHuhn
-    public boolean checkBefehl(String befehl) {
+    public String checkBefehl(String befehl) {
         //BEFEHL
         if (scanner.getType().equals("BEFEHL") && scanner.getValue().equals(befehl)) {
             scanner.nextToken();
@@ -220,9 +216,15 @@ public class Parser implements ParserInterface {
                                             }
                                         }
                                     }
-                                    return true;
+                                    return "Keine Fehler";
+                                }else{
+                                    return "Es fehlt die Punktation ';'";
                                 }
+                            }else{
+                                return "Es fehlt die Punktation ')'";
                             }
+                        }else{
+                            return "Schreibe eine Zahl";
                         }
                     }else if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                         scanner.nextToken();
@@ -230,8 +232,12 @@ public class Parser implements ParserInterface {
                             for(int i = 0; i < zahlOne; i++){
                                 queue.enqueue(array = new int[]{4});
                             }
-                            return true;
+                            return "Keine Fehler";
+                        }else{
+                            return "Es fehlt die Punktation ';'";
                         }
+                    }else{
+                        return "Es fehlt die Punktation ',' oder ')'";
                     }
                 }else if(scanner.hasAccess() && scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                     scanner.nextToken();
@@ -241,11 +247,16 @@ public class Parser implements ParserInterface {
                             case "drehLinks" -> queue.enqueue(array = new int[]{6});
                             case "drehRechts" -> queue.enqueue(array = new int[]{5});
                         }
-                        return true;
+                        return "Keine Fehler";
+                    }else{
+                        return "Es fehlt die Punktation ';'";
                     }
+                }else{
+                    return "Schreibe eine Zahl";
                 }
+            }else{
+                return "Es fehlt die Punktation '(' ";
             }
-        return false;
     }
 
     public boolean getScannerResult(String input) {
