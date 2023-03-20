@@ -51,7 +51,7 @@ public class Parser implements ParserInterface {
         huhnErzeugt = false;
         queue = new Queue<>();
         if (!input.equals("") && scanner.scan(input)) {
-            if (scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
+            if (scanner.hasAccess() && scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
                 scanner.nextToken();
                 if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Aufbau")) {
