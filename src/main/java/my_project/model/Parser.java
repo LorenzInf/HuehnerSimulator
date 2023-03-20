@@ -99,7 +99,34 @@ public class Parser implements ParserInterface {
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)}
                                                 if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                     scanner.nextToken();
-                                                    return "Keine Fehler";
+                                                    if (scanner.hasAccess() && scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
+                                                        scanner.nextToken();
+                                                        if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
+                                                            scanner.nextToken();
+                                                            if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
+                                                                scanner.nextToken();
+                                                                while (scanner.hasAccess() && !scanner.getValue().equals("}")) {
+                                                                    if (scanner.getType().equals("BEFEHL")) {
+                                                                        checkBefehl(scanner.getValue());
+                                                                        scanner.nextToken();
+                                                                    } else {
+                                                                        return "Unbekannter Befehl";
+                                                                    }
+                                                                }
+                                                                if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
+                                                                    return "Keine Fehler";
+                                                                } else {
+                                                                    return "Es fehlt eine Punktuation('}')";
+                                                                }
+                                                            } else {
+                                                                return "Es fehlt eine Punktuation ('{')";
+                                                            }
+                                                        } else {
+                                                            return "Es fehlt der Bezeichner";
+                                                        }
+                                                    } else {
+                                                        return "Es fehlt ein Schlüsselwort";
+                                                    }
                                                 } else {
                                                     return "Es fehlt eine Punktuation('}')";
                                                 }
@@ -124,7 +151,7 @@ public class Parser implements ParserInterface {
                     } else {
                         return "Es fehlt eine Punktuation('(')";
                     }
-                } else if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
+                /*} else if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER") && scanner.getValue().equals("Durchlauf")) {
                     scanner.nextToken();
                     if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                         scanner.nextToken();
@@ -140,6 +167,7 @@ public class Parser implements ParserInterface {
                             return "Keine Fehler";
                         }
                     }
+                    */
                 } else {
                     return "Es fehlt ein Bezeichner";
                 }
