@@ -102,16 +102,17 @@ public class Field extends GraphicalObject {
         Sound sound;
         int newX = (int) chicken.getX() + chicken.getMovementToX();
         int newY = (int) chicken.getY() + chicken.getMovementToY();
-        if(field[newX][newY] instanceof Food){
-            sound = new Sound("src/main/resources/sound/Gets-Food.mp3","Walks",false);
-            sound.play();
-        }
-        if (newX < field.length && newY  < field[0].length && !(field[newX][newY] instanceof Fence)) {
+        System.out.println(newX + " ->x " + newY + " ->y " );
+        if (newX > -1 && newY > -1 && newX < field.length && newY  < field[newX].length &&  !(field[newX][newY] instanceof Fence)) {
             field[chicken.getXPos()][chicken.getYPos()] = null;
             chicken.setX(newX);
             chicken.setY(newY);
+            if(field[newX][newY] instanceof Food){
+                sound = new Sound("src/main/resources/sound/Gets-Food.mp3","Walks",false);
+            }else {
+                sound = new Sound("src/main/resources/sound/Walks.mp3", "Walks", false);
+            }
             field[newX][newY] = chicken;
-            sound = new Sound("src/main/resources/sound/Walks.mp3","Walks",false);
             sound.play();
         }
 
