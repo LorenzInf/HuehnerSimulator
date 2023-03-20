@@ -25,6 +25,7 @@ public class InputField {
         parser = new Parser();
         this.programController = programController;
         statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
+        statusLabel.setText("Es müssen Mengenklammern gesetzt werden!");
         System.out.println(statusLabel.getFont().getSize());
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -42,20 +43,10 @@ public class InputField {
             public void actionPerformed(ActionEvent e) {
                 boolean works = false;
                 String output = parser.parse(textArea.getText());
-                switch (output){
-                    case "Es fehlt das Schlüsselwort ´part´" -> statusLabel.setText(output);
-                    case "Keine Fehler" -> { statusLabel.setText(output); works = true; }
-                    case "Es fehlt eine Punktuation('{')" -> statusLabel.setText(output);
-                    case "Es fehlt eine Punktuation('}')" -> statusLabel.setText(output);
-                    case "Du musst ein Huhn erzeugen" -> statusLabel.setText(output);
-                    case "Es fehlt eine Punktuation(')')" -> statusLabel.setText(output);
-                    case "Es fehlt eine Zahl" -> statusLabel.setText(output);
-                    case "Es fehlt eine Punktuation(',')" -> statusLabel.setText(output);
-                    case "Es fehlt eine Punktuation('(')" -> statusLabel.setText(output);
-                    case "Es fehlt der Bezeichner 'Aufbau'" -> statusLabel.setText(output);
-                    case "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!" -> statusLabel.setText(output);
-                    case "Es fehlt der Bezeichner 'Durchlauf'" -> statusLabel.setText(output);
+                if(output.equals("Keine Fehler")){
+                    works = true;
                 }
+                statusLabel.setText(output);
                 if(works){
                     programController.startSimulation(parser.getQueue());
                 }
@@ -71,7 +62,7 @@ public class InputField {
             statusLabel.setForeground(new Color(200,10,10));
             statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.BOLD,17));
         } else {
-            statusLabel.setText("Die Mengenklammern müssen erzeugt werden, damit das Programm debuggen kann!");
+            //statusLabel.setText("Die Mengenklammern müssen erzeugt werden, damit das Programm debuggen kann!");
             statusLabel.setForeground(Color.BLACK);
             statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
         }

@@ -84,7 +84,7 @@ public class Parser implements ParserInterface {
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
                                                 if (scanner.getType().equals("BEZEICHNER")) {
-                                                    return "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!";
+                                                    return "Unbekannter Befehl";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
                                                 while (checkBefehl("erzeugeZaun")) {
@@ -92,7 +92,7 @@ public class Parser implements ParserInterface {
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
                                                 if (scanner.getType().equals("BEZEICHNER")) {
-                                                    return "Halte dich an die Syntax, du nutzt Befehle, die keinen Sinn ergeben!";
+                                                    return "Unbekannter Befehl";
                                                 }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)}
                                                 if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
@@ -131,7 +131,7 @@ public class Parser implements ParserInterface {
                                 checkBefehl(scanner.getValue());
                                 scanner.nextToken();
                             } else {
-                                return "Bitte schreibe die Befehle in der richtigen Syntax!";
+                                return "Unbekannter Befehl";
                             }
                         }
                         if (scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
@@ -139,10 +139,10 @@ public class Parser implements ParserInterface {
                         }
                     }
                 } else {
-                    return "Es fehlt der Bezeichner 'Durchlauf' oder 'Part'";
+                    return "Es fehlt ein Bezeichner";
                 }
             } else {
-                return "Es fehlt das Schlüsselwort ´part´";
+                return "Es fehlt das Schlüsselwort";
             }
         }
         return "Die Syntax ist falsch!";
