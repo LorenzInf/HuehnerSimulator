@@ -48,6 +48,7 @@ public class Parser implements ParserInterface {
 
     //Richtige Parse Methode, die Rückgabe fehlt, weil das bei dem Part nach Durchlauf kommt
     public String parse(String input) {
+        huhnErzeugt = false;
         if (scanner.scan(input)) {
             if (scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
