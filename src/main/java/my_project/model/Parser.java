@@ -8,6 +8,7 @@ public class Parser implements ParserInterface {
     private Queue<int[]> queue;
     private int[] array;
     private boolean huhnErzeugt;
+    private int chickenX, chickenY,fenceX,fenceY,foodX,foodY;
 
     // int[0] == erzeugeFeld
     // int[1] == erzeugeHuhn
@@ -50,6 +51,7 @@ public class Parser implements ParserInterface {
     public String parse(String input) {
         huhnErzeugt = false;
         queue = new Queue<>();
+        foodX = foodY = fenceY = fenceX = 0;
         if (!input.equals("") && scanner.scan(input)) {
             if (scanner.hasAccess() && scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
@@ -82,6 +84,9 @@ public class Parser implements ParserInterface {
                                                 scanner.nextToken();
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
                                                 while (scanner.hasAccess() && (checkBefehl("erzeugeEssen") || checkBefehl("erzeugeZaun"))) {
+                                                    if((foodX == chickenX && foodY == chickenY) || (fenceX == chickenX && fenceY == chickenY)){
+                                                        return "Keine Objekte auf dem Huhzn erzeugen!";
+                                                    }
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
@@ -196,12 +201,22 @@ public class Parser implements ParserInterface {
                                 //BEFEHL(ZAHL,ZAHL);
                                 if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
-                                        case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
-                                        case "erzeugeZaun" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                        case "erzeugeEssen" -> {
+                                            queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
+                                            foodX = zahlOne;
+                                            foodY = zahlTwo;
+                                        }
+                                        case "erzeugeZaun" -> {
+                                            queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                            fenceX = zahlOne;
+                                            fenceY = zahlTwo;
+                                        }
                                         case "erzeugeHuhn" -> {
                                             if(!huhnErzeugt){
                                                 queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
                                                 huhnErzeugt = true;
+                                                chickenX = zahlOne;
+                                                chickenY = zahlTwo;
                                             }
                                         }
                                     }
