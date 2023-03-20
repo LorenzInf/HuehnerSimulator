@@ -41,6 +41,8 @@ public class Field extends GraphicalObject {
     @Override
     public void draw(DrawTool drawTool) {
         drawTool.drawImage(background,0,0);
+        int pointerX = -1;
+        int pointerY = -1;
         drawTool.setCurrentColor(Color.BLACK);
         for(int i = 0; i*50+xMin < xMax; i++){
             for(int j = 0; j*50+yMin < yMax; j++){
@@ -66,8 +68,17 @@ public class Field extends GraphicalObject {
                 drawTool.drawRectangle(i*50+xMin,j*50+yMin,50,50);
                 if(field[i][j] != null){
                     drawTool.drawImage(field[i][j].getImg(),i*50+xMin,j*50+yMin);
+                    if(field[i][j] instanceof Chicken){
+                        pointerX = (i*50+xMin +25)+chicken.getMovementToX()*50;
+                        pointerY = (j*50+yMin +25)+chicken.getMovementToY()*50;
+
+                    }
                 }
             }
+        }
+        if(pointerX != -1){
+            drawTool.setCurrentColor(Color.RED);
+            drawTool.drawFilledCircle(pointerX,pointerY,5);
         }
     }
 
