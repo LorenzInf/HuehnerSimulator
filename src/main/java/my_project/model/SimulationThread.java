@@ -19,14 +19,14 @@ public class SimulationThread implements Runnable{
     @Override
     public void run() {
         while (!commands.isEmpty()){
-            skipTime = false;
+            skipTime = true;
             System.out.println(Arrays.toString(commands.front())); //Debug
             switch (commands.front()[0]) {
-                case 0 -> { programController.createField(commands.front()[1], commands.front()[2]); skipTime = true; }
-                case 1 -> programController.createChicken(commands.front()[1], commands.front()[2]);
-                case 2 -> { programController.createFood(commands.front()[1], commands.front()[2]); skipTime = true; }
-                case 3 -> { programController.createFence(commands.front()[1], commands.front()[2]); skipTime = true; }
-                case 4 -> programController.moveChicken();
+                case 0 -> programController.createField(commands.front()[1], commands.front()[2]);
+                case 1 -> { programController.createChicken(commands.front()[1], commands.front()[2]);skipTime = false; }
+                case 2 -> programController.createFood(commands.front()[1], commands.front()[2]);
+                case 3 -> programController.createFence(commands.front()[1], commands.front()[2]);
+                case 4 -> { programController.moveChicken();skipTime = false; }
                 case 5 -> programController.turnRight();
                 case 6 -> programController.turnLeft();
             }

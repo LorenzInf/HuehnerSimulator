@@ -1,5 +1,7 @@
 package my_project.model;
+import KAGO_framework.control.SoundController;
 import KAGO_framework.model.GraphicalObject;
+import KAGO_framework.model.Sound;
 import KAGO_framework.view.DrawTool;
 
 import java.awt.*;
@@ -12,6 +14,8 @@ public class Field extends GraphicalObject {
     private BufferedImage[] fieldImg;
     private BufferedImage background;
     private Chicken chicken;
+    private Sound walksSound;
+    private Sound getsFoodSound;
 
     public Field(int x, int y, Chicken chicken){
         this.x = x;
@@ -95,14 +99,22 @@ public class Field extends GraphicalObject {
     }
 
     public void moveChicken(){
-        int newX = Math.min( ((int) chicken.getX() + chicken.getMovementToX()), field.length - 1);
-        int newY = Math.min( ((int) chicken.getY() + chicken.getMovementToY()), field[0].length - 1);
-        if (!(field[newX][newY] instanceof Fence)) {
+        Sound sound;
+        int newX = (int) chicken.getX() + chicken.getMovementToX();
+        int newY = (int) chicken.getY() + chicken.getMovementToY();
+        if(field[newX][newY] instanceof Food){
+            sound = new Sound("src/main/resources/sound/Gets-Food.mp3","Walks",false);
+            sound.play();
+        }
+        if (newX < field.length && newY  < field[0].length && !(field[newX][newY] instanceof Fence)) {
             field[chicken.getXPos()][chicken.getYPos()] = null;
             chicken.setX(newX);
             chicken.setY(newY);
             field[newX][newY] = chicken;
+            sound = new Sound("src/main/resources/sound/Walks.mp3","Walks",false);
+            sound.play();
         }
+
     }
 
 
