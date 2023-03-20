@@ -72,15 +72,6 @@ public class Scanner {
                 } else return false;
             }
         }
-        /*
-        //DEBUG//
-        tokenList.toFirst();
-        while(tokenList.hasAccess()) {
-            System.out.print("[" + tokenList.getContent().getTokenType() + ", " + tokenList.getContent().getTokenName() + "], ");
-            tokenList.next();
-        }
-        System.out.println();
-        */
         tokenList.toFirst();
         return true;
     }
