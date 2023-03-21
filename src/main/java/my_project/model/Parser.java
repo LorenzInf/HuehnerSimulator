@@ -8,6 +8,7 @@ public class Parser implements ParserInterface {
     private Queue<int[]> queue;
     private int[] array;
     private boolean huhnErzeugt;
+    private int chickenX, chickenY,fenceX,fenceY,foodX,foodY;
 
     // int[0] == erzeugeFeld
     // int[1] == erzeugeHuhn
@@ -50,6 +51,7 @@ public class Parser implements ParserInterface {
     public String parse(String input) {
         huhnErzeugt = false;
         queue = new Queue<>();
+        foodX = foodY = fenceY = fenceX = 0;
         if (!input.equals("") && scanner.scan(input)) {
             if (scanner.hasAccess() && scanner.getType().equals("S-WORT") && scanner.getValue().equals("part")) {
                 //partAufbau
@@ -78,18 +80,13 @@ public class Parser implements ParserInterface {
                                         if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                             scanner.nextToken();
                                             //partAufbau(ZAHL,ZAHL){erzeugeHuhn;
-                                            if (scanner.hasAccess() && checkBefehl("erzeugeHuhn")) {
+                                            if (scanner.hasAccess() && checkBefehl("erzeugeHuhn").equals("Keine Fehler")) {
                                                 scanner.nextToken();
-                                                //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*
-                                                while (scanner.hasAccess() && checkBefehl("erzeugeEssen")) {
-                                                    scanner.nextToken();
-                                                }
-                                                //Abfangen, wenn zu viel geschrieben wird
-                                                if (scanner.hasAccess() && scanner.getType().equals("BEZEICHNER")) {
-                                                    return "Unbekannter Befehl";
-                                                }
                                                 //partAufbau(ZAHL,ZAHL){erzeugeHuhn(ZAHL,ZAHL);(erzeugeEssen(ZAHL,ZAHL);)*(erzeugeZaun(ZAHL,ZAHL);)*
-                                                while (scanner.hasAccess() && checkBefehl("erzeugeZaun")) {
+                                                while (scanner.hasAccess() && (checkBefehl("erzeugeEssen").equals("Keine Fehler") || checkBefehl("erzeugeZaun").equals("Keine Fehler"))) {
+                                                    if((foodX == chickenX && foodY == chickenY) || (fenceX == chickenX && fenceY == chickenY)){
+                                                        return "Keine Objekte auf dem Huhn erzeugen!";
+                                                    }
                                                     scanner.nextToken();
                                                 }
                                                 //Abfangen, wenn zu viel geschrieben wird
@@ -106,12 +103,8 @@ public class Parser implements ParserInterface {
                                                             if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("{")) {
                                                                 scanner.nextToken();
                                                                 while (scanner.hasAccess() && !scanner.getValue().equals("}")) {
-                                                                    if (scanner.getType().equals("BEFEHL")) {
-                                                                        checkBefehl(scanner.getValue());
-                                                                        scanner.nextToken();
-                                                                    } else {
-                                                                        return "Unbekannter Befehl";
-                                                                    }
+                                                                    checkBefehl(scanner.getValue());
+                                                                    scanner.nextToken();
                                                                 }
                                                                 if (scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals("}")) {
                                                                     return "Keine Fehler";
@@ -179,7 +172,7 @@ public class Parser implements ParserInterface {
     }
 
     //Checkt ob der Befehl gültig ist: z.B. erzeugeHuhn
-    public boolean checkBefehl(String befehl) {
+    public String checkBefehl(String befehl) {
         //BEFEHL
         if (scanner.getType().equals("BEFEHL") && scanner.getValue().equals(befehl)) {
             scanner.nextToken();
@@ -204,18 +197,34 @@ public class Parser implements ParserInterface {
                                 //BEFEHL(ZAHL,ZAHL);
                                 if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(";")){
                                     switch (befehl) {
-                                        case "erzeugeEssen" -> queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
-                                        case "erzeugeZaun" -> queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                        case "erzeugeEssen" -> {
+                                            queue.enqueue(array = new int[]{2, zahlOne, zahlTwo});
+                                            foodX = zahlOne;
+                                            foodY = zahlTwo;
+                                        }
+                                        case "erzeugeZaun" -> {
+                                            queue.enqueue(array = new int[]{3, zahlOne, zahlTwo});
+                                            fenceX = zahlOne;
+                                            fenceY = zahlTwo;
+                                        }
                                         case "erzeugeHuhn" -> {
                                             if(!huhnErzeugt){
                                                 queue.enqueue(array = new int[]{1, zahlOne, zahlTwo});
                                                 huhnErzeugt = true;
+                                                chickenX = zahlOne;
+                                                chickenY = zahlTwo;
                                             }
                                         }
                                     }
-                                    return true;
+                                    return "Keine Fehler";
+                                }else{
+                                    return "Es fehlt die Punktation ';'";
                                 }
+                            }else{
+                                return "Es fehlt die Punktation ')'";
                             }
+                        }else{
+                            return "Schreibe eine Zahl";
                         }
                     }else if(scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                         scanner.nextToken();
@@ -223,8 +232,12 @@ public class Parser implements ParserInterface {
                             for(int i = 0; i < zahlOne; i++){
                                 queue.enqueue(array = new int[]{4});
                             }
-                            return true;
+                            return "Keine Fehler";
+                        }else{
+                            return "Es fehlt die Punktation ';'";
                         }
+                    }else{
+                        return "Es fehlt die Punktation ',' oder ')'";
                     }
                 }else if(scanner.hasAccess() && scanner.hasAccess() && scanner.getType().equals("PUNKTUATION") && scanner.getValue().equals(")")){
                     scanner.nextToken();
@@ -234,11 +247,16 @@ public class Parser implements ParserInterface {
                             case "drehLinks" -> queue.enqueue(array = new int[]{6});
                             case "drehRechts" -> queue.enqueue(array = new int[]{5});
                         }
-                        return true;
+                        return "Keine Fehler";
+                    }else{
+                        return "Es fehlt die Punktation ';'";
                     }
+                }else{
+                    return "Schreibe eine Zahl";
                 }
+            }else{
+                return "Es fehlt die Punktation '(' ";
             }
-        return false;
     }
 
     public boolean getScannerResult(String input) {

@@ -45,6 +45,9 @@ public class ProgramController{
     }
 
     public void startSimulation(Queue<int[]> commands){
+        if(thread != null && thread.isAlive()){
+            thread.stop();
+        }
         thread = new Thread(new SimulationThread(commands,this));
         thread.start();
     }
@@ -66,6 +69,7 @@ public class ProgramController{
 
     public void createChicken(int x, int y){
         field.placeChickenTo(x,y);
+        chicken.resetCurrent();
     }
 
     public void moveChicken(){
