@@ -50,7 +50,7 @@ public class Scanner {
             for(int i = 0; i < line.length(); i++) {
                 if(String.valueOf(line.charAt(i)).matches("[a-zA-z]")) {
                     StringBuilder currWord = new StringBuilder();
-                    for(; i < line.length() && !String.valueOf(line.charAt(i)).matches("[(){},;\\s]"); i++) {
+                    for(; i < line.length() && String.valueOf(line.charAt(i)).matches("[a-zA-Z0-9]"); i++) {
                         currWord.append(line.charAt(i));
                     }
                     i--;
