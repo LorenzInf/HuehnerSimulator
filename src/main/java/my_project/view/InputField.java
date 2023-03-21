@@ -63,9 +63,9 @@ public class InputField {
         } else {
             statusLabel.setForeground(Color.BLACK);
             statusLabel.setFont(new Font(statusLabel.getFont().getName(),Font.ITALIC,12));
+            String output = parser.parse(textArea.getText());
+            statusLabel.setText(output);
         }
-        String output = parser.parse(textArea.getText());
-        statusLabel.setText(output);
     }
 
     public JTextArea getTextArea() {
